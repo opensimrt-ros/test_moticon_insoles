@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<launch>
+	<arg name="foot_left_name" default="calcn_l"/>
+	<arg name="foot_right_name" default="calcn_r"/>
+	<arg name="foot_distance_from_ground" default="0.03"/>
+	<arg name="insole_distance_from_foot" default="0.01"/>
+	<arg name="ignore_insole_imu_for_vis"	default="true"/>
+	<param name="robot_description" command="$(find xacro)/xacro human_with_ximus_and_insole.urdf.xacro left_name:=$(arg foot_left_name) right_name:=$(arg foot_right_name)"/>
+
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find moticon_insoles)/insole_test.rviz" />
+	<!-- 1, 2 represent the opensim model-->
+	<!-- 3 goes to the middle of the foot and is always a fixed transform from a bone in the foot and the center of that foot-->
+	<!-- 4 is representing an IMU and if enabled will be a fixed transform-->
+	<!-- 1 -->
+	<include file="$(find gait1992_description)/launch/gui.launch"/>
+	<include file="$(find gait1992_description)/launch/pelvis_map_pose_fake_tf_publisher.launch"/>
+	<include file="$(find gait1992_description)/launch/human_state_pub.launch"/>
+	<group ns="left">
+		<!-- 3 -->
+		<node pkg="tf" type="static_transform_publisher" name="skeleton_foot_to_center_of_foot_broadcaster" args="0 .10 0 0 0 0 $(arg foot_left_name) left_foot_center 10" />
+		<!-- 4 -->
+		<node pkg="tf" if="$(arg ignore_insole_imu_for_vis)" type="static_transform_publisher" name="insole_fixed_insole_link_broadcaster" args="0 0 -$(arg insole_distance_from_foot) 0 0 0 1 left_foot_center left_insole 10" />
+	</group>
+	<group ns="right">
+		<!-- this is always going to be present and should be a fixed transform from the calcaneus bone to the middle of the foot-->
+		<node pkg="tf" type="static_transform_publisher" name="skeleton_foot_to_center_of_foot_broadcaster" args="0 .10 0 0 0 0 $(arg foot_right_name) right_foot_center 10" />
+		<node pkg="tf" if="$(arg ignore_insole_imu_for_vis)" type="static_transform_publisher" name="insole_fixed_insole_link_broadcaster" args="0 0 -$(arg insole_distance_from_foot) 0 0 0 1 right_foot_center right_insole 10" />
+	</group>
+
+</launch>

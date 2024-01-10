@@ -9,8 +9,8 @@ tmux set -g pane-border-status top
 W1=(
 "roslaunch moticon_insoles read_sdk.launch --wait"
 "rqt_plot"
-"roslaunch republisher republisher_insoles.launch use_imu_for_insole_orientation:=true --wait"
-"roslaunch moticon_insoles show_urdf.launch ignore_insole_imu_for_vis:=false"
+"roslaunch republisher republisher_insoles.launch --wait"
+"roslaunch test_moticon_insoles show_urdf_everything.launch"
 )
 
 create_tmux_window "$SESSION_NAME" "main_nodes" "${W1[@]}"
