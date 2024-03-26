@@ -6,16 +6,20 @@
 	<arg name="foot_distance_from_ground" default="0.03"/>
 	<arg name="insole_distance_from_foot" default="0.01"/>
 	<arg name="ignore_insole_imu_for_vis"	default="true"/>
-	<param name="robot_description" command="$(find xacro)/xacro human_with_ximus_and_insole.urdf.xacro left_name:=$(arg foot_left_name) right_name:=$(arg foot_right_name)"/>
+	<arg name="use_gui"	default="true"/>
+	<param name="robot_description" command="$(find xacro)/xacro $(find test_moticon_insoles)/human_with_ximus_and_insole.urdf.xacro left_name:=$(arg foot_left_name) right_name:=$(arg foot_right_name)"/>
 
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find moticon_insoles)/insole_test.rviz" />
 	<!-- 1, 2 represent the opensim model-->
 	<!-- 3 goes to the middle of the foot and is always a fixed transform from a bone in the foot and the center of that foot-->
 	<!-- 4 is representing an IMU and if enabled will be a fixed transform-->
 	<!-- 1 -->
-	<include file="$(find gait1992_description)/launch/gui.launch"/>
-	<include file="$(find gait1992_description)/launch/pelvis_map_pose_fake_tf_publisher.launch"/>
+	<include if="$(arg use_gui)" file="$(find gait1992_description)/launch/gui.launch"/>
+	<include if="$(arg use_gui)" file="$(find gait1992_description)/launch/pelvis_map_pose_fake_tf_publisher.launch"/>
+	<include unless="$(arg use_gui)" file="$(find gait1992_description)/launch/feet_missing_tfs_publisher.launch"/>
 	<include file="$(find gait1992_description)/launch/human_state_pub.launch"/>
+	<include file="$(find osrt_ros)/launch/custom_filtered.launch"/>
+	<include file="$(find osrt_ros)/launch/opensim_tf.launch"/>
 	<group ns="left">
 		<!-- 3 -->
 		<node pkg="tf" type="static_transform_publisher" name="skeleton_foot_to_center_of_foot_broadcaster" args="0 .10 0 0 0 0 $(arg foot_left_name) left_foot_center 10" />
