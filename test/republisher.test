@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+	<node pkg="tf" type="static_transform_publisher" name="dummy_broadcaster" args="1 0 0 0 0 0 1 map dummy_imu 100" />
+	<include file="$(find moticon_insoles)/launch/feet_wrench_and_ik_from_file.launch" >
+		<arg name="wait_for_trigger" value="false"/>
+		<!-- arg name="freq" value="100"/ -->
+
+	</include>
+	<include file="$(find republisher)/launch/republisher_insoles.launch" />
+
+	<group ns="left">
+		<test test-name="checkdelay_left" pkg="test_moticon_insoles" type="check_delay_external"/>
+	</group>
+	<group ns="right">
+		<test test-name="checkdelay_right" pkg="test_moticon_insoles" type="check_delay_external"/>
+	</group>
+	<!-- node name="commander" pkg="test_osrt_ros" type="commander_node.py" / -->
+</launch>
