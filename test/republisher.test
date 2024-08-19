@@ -9,10 +9,10 @@
 	<include file="$(find republisher)/launch/republisher_insoles.launch" />
 
 	<group ns="left">
-		<test test-name="checkdelay_left" pkg="test_moticon_insoles" type="check_delay_external"/>
+		<test test-name="checkdelay_left" pkg="test_moticon_insoles" type="check_delay_external.py"/>
 	</group>
 	<group ns="right">
-		<test test-name="checkdelay_right" pkg="test_moticon_insoles" type="check_delay_external"/>
+		<test test-name="checkdelay_right" pkg="test_moticon_insoles" type="check_delay_external.py"/>
 	</group>
 	<!-- node name="commander" pkg="test_osrt_ros" type="commander_node.py" / -->
 </launch>
