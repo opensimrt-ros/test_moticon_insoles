@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+	<node pkg="rqt_plot" type="rqt_plot" 	name="rqt_plot_insoles" output="screen"/>
+	<include file="$(find moticon_insoles)/launch/read_sdk.launch" />
+	<include file="$(find republisher)/launch/republisher_insoles.launch"/>
+	<include file="$(find moticon_insoles)/launch/show_urdf.launch" >
+		<arg name="ignore_insole_imu_for_vis" value="false" />
+	</include>
+</launch>
+
+
