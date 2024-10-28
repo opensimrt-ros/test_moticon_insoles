@@ -10,7 +10,7 @@ W1=(
 "roslaunch moticon_insoles read_sdk.launch --wait"
 "rqt_plot"
 "roslaunch republisher republisher_insoles.launch --wait"
-"roslaunch test_moticon_insoles show_urdf_everything.launch"
+"roslaunch moticon_insoles show_urdf_everything.launch"
 )
 
 create_tmux_window "$SESSION_NAME" "main_nodes" "${W1[@]}"
